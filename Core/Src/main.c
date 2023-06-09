@@ -83,7 +83,7 @@ uint32_t totalSpace, freeSpace;
 int main(void)
 {
 	/* USER CODE BEGIN 1 */
-	int x;
+	
 	/* USER CODE END 1 */
 
 	/* MCU Configuration--------------------------------------------------------*/
