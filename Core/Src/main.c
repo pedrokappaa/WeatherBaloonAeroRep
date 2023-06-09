@@ -84,7 +84,10 @@ int main(void)
 {
 	/* USER CODE BEGIN 1 */
 
+	// Adding AMC Changes
+	
 	/* USER CODE END 1 */
+	
 
 	/* MCU Configuration--------------------------------------------------------*/
 
