@@ -1,6 +1,10 @@
 #ifndef __FATFS_SD_H
 #define __FATFS_SD_H
 
+#include "integer.h"
+#include "diskio.h"
+#include "stm32f7xx_hal.h"
+
 /* Definitions for MMC/SDC command */
 #define CMD0     (0x40+0)     	/* GO_IDLE_STATE */
 #define CMD1     (0x40+1)     	/* SEND_OP_COND */

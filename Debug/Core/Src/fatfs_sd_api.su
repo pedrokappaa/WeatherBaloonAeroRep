@@ -1,0 +1,4 @@
+../Core/Src/fatfs_sd_api.c:15:6:SDCardInit	8	static
+../Core/Src/fatfs_sd_api.c:30:6:SDCardWrite	16	static
+../Core/Src/fatfs_sd_api.c:36:6:SDCardHasLowSpace	8	static
+../Core/Src/fatfs_sd_api.c:50:6:SDCardEnd	8	static

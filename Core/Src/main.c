@@ -28,9 +28,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 //#include "usbd_cdc_if.h"
-#include "string.h"
-#include "fatfs_sd.h"
 #include <stdio.h>
+#include <string.h>
+#include "fatfs_sd.h"
+#include "fatfs_sd_api.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,17 +63,6 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// SD Card Init
-
-FATFS fs;						// file system data
-FIL fil;						// file pointer
-FRESULT fresult;				// to store the result
-char buffer[BUFFER_SIZE];		// to store data
-UINT br, bw;					// file r/w count
-FATFS *pfs;
-DWORD fre_clust;
-uint32_t totalSpace, freeSpace;
-
 
 /* USER CODE END 0 */
 
@@ -83,7 +73,11 @@ uint32_t totalSpace, freeSpace;
 int main(void)
 {
 	/* USER CODE BEGIN 1 */
+<<<<<<< Updated upstream
 
+=======
+	
+>>>>>>> Stashed changes
 	/* USER CODE END 1 */
 
 	/* MCU Configuration--------------------------------------------------------*/
@@ -113,72 +107,14 @@ int main(void)
 	reset_UART();
 	send_UART(PROMPT);
 
-	// Wait for SD module reset
-	HAL_Delay(500);
+	if(SDCardInit())
+		send_UART("true");
 
-  	// Mount SD Card
-  	if(f_mount(&fs, "", 0) != FR_OK)
-  		send_UART("Not mounted");
+	SDCardWrite("Hello\n");
 
-  	HAL_Delay(500);
+	if(SDCardEnd())
+		send_UART("true");
 
-  	// Open file to write
-  	if(f_open(&fil, "first.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE) != FR_OK)
-  		send_UART("Not opened");
-
-  	HAL_Delay(500);
-
-  	// Check freeSpace space
-  	if(f_getfree("", &fre_clust, &pfs) != FR_OK)
-  		send_UART("Not free");
-
-  	HAL_Delay(500);
-
-  	totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
-  	freeSpace = (uint32_t)(fre_clust * pfs->csize * 0.5);
-
-  	HAL_Delay(500);
-
-  	// free space is less than 1kb
-  	if(freeSpace < 1)
-  		send_UART("Low storage");
-
-  	HAL_Delay(500);
-
-  	// Writing text
-  	f_puts("STM32 SD Card I/O Example via SPI\n", &fil);
-  	f_puts("Save the world!!!", &fil);
-
-  	HAL_Delay(500);
-
-  	// Close file
-  	if(f_close(&fil) != FR_OK)
-  		send_UART("Not closed");
-
-  	HAL_Delay(500);
-
-  	// Open file to read
-  	if(f_open(&fil, "first.txt", FA_READ) != FR_OK)
-  		send_UART("Not opened");
-
-  	HAL_Delay(500);
-
-  	while(f_gets(buffer, sizeof(buffer), &fil))
-  	{
-  		send_UART(buffer);
-  	}
-
-  	HAL_Delay(500);
-
-  	// Close file
-  	if(f_close(&fil) != FR_OK)
-  		send_UART("Not closed");
-
-  	HAL_Delay(500);
-
-  	// Unmount SDCARD
-  	if(f_mount(NULL, "", 1) != FR_OK)
-  		send_UART("Not unmounted");
 
 	/* USER CODE END 2 */
 
