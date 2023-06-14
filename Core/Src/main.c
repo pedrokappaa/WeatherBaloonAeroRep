@@ -74,6 +74,44 @@ DWORD fre_clust;
 uint32_t totalSpace, freeSpace;
 
 
+//Construir a mensagem a enviar para o slave
+void ConstMsg(char* Msg, float T_PT100, float T_STM, float B1, float B2, float B3){
+
+	if(T_PT100>=0 && T_STM>=0){
+		sprintf(Msg, "{T1:+%.2f;T2:+%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
+	}
+
+	if(T_PT100>=0 && T_STM<0){
+		sprintf(Msg, "{T1:+%.2f;T2:-%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
+	}
+
+	if(T_PT100<0 && T_STM>=0){
+		sprintf(Msg, "{T1:-%.2f;T2:+%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
+	}
+
+	if(T_PT100<0 && T_STM<0){
+		sprintf(Msg, "{T1:-%.2f;T2:-%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
+	}
+
+}
+
+//Envio de dados para o Slave
+void SendToSlave(char* MSG, int lenMSG){
+
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_RESET); // colocar a CS em Low para iniciar a comunicacao
+	HAL_Delay(10);
+	int i = 0;
+	for(i=0;i<strlen(MSG);i++){
+		char dataSend = MSG[i];
+		HAL_SPI_Transmit(&hspi4, (uint8_t*)&dataSend, 1,100); //realizar a transmissao byte a byte
+		HAL_Delay(10); //esperar 10ms
+
+	}
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // Acabar comunicacao
+	HAL_Delay(50); //esperar 50ms
+}
+
+
 /* USER CODE END 0 */
 
 /**
@@ -82,11 +120,17 @@ uint32_t totalSpace, freeSpace;
   */
 int main(void)
 {
+<<<<<<< Updated upstream
 	/* USER CODE BEGIN 1 */
 	
 	/* USER CODE END 1 */
 
 	/* MCU Configuration--------------------------------------------------------*/
+=======
+  /* USER CODE BEGIN 1 */
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // CS High => No communication between Slave (Arduino) and Master (STM)
+  /* USER CODE END 1 */
+>>>>>>> Stashed changes
 
 	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 	HAL_Init();
@@ -219,7 +263,23 @@ int main(void)
 			*/
 		}
 
+<<<<<<< Updated upstream
 	/* USER CODE END WHILE */
+=======
+		//Test values
+		float T_PT100 = 20.345689; // PT100 temperature
+		float T_STM = 19.452389; // STM temperature
+		float B1 = 4.56756; //battery 1 level
+		float B2 = 3.23453; //battery 2 level
+		float B3 = 5.001; //battery 3 level
+
+
+		char MSG[42] = ""; //Message to send
+		ConstMsg(MSG, T_PT100, T_STM, B1, B2, B3); // build Message
+		SendToSlave(MSG, strlen(MSG)); //Send message MSG to Slave
+
+    /* USER CODE END WHILE */
+>>>>>>> Stashed changes
 
 	/* USER CODE BEGIN 3 */
 	}

@@ -121,6 +121,7 @@ ProjectManager.PreviousToolchain=STM32CubeIDE
 ProjectManager.ProjectBuild=false
 ProjectManager.ProjectFileName=Balloon.ioc
 ProjectManager.ProjectName=Balloon
+ProjectManager.ProjectStructure=
 ProjectManager.RegisterCallBack=
 ProjectManager.StackSize=0x400
 ProjectManager.TargetToolchain=STM32CubeIDE
@@ -227,6 +228,21 @@ SPI1.Direction=SPI_DIRECTION_2LINES
 SPI1.IPParameters=VirtualType,Mode,Direction,CalculateBaudRate,BaudRatePrescaler,DataSize
 SPI1.Mode=SPI_MODE_MASTER
 SPI1.VirtualType=VM_MASTER
+<<<<<<< Updated upstream
+=======
+SPI4.BaudRatePrescaler=SPI_BAUDRATEPRESCALER_4
+SPI4.CalculateBaudRate=4.0 MBits/s
+SPI4.DataSize=SPI_DATASIZE_8BIT
+SPI4.Direction=SPI_DIRECTION_2LINES
+SPI4.IPParameters=VirtualType,Mode,Direction,CalculateBaudRate,DataSize,BaudRatePrescaler,NSSPMode
+SPI4.Mode=SPI_MODE_MASTER
+SPI4.NSSPMode=SPI_NSS_PULSE_DISABLE
+SPI4.VirtualType=VM_MASTER
+TIM1.IPParameters=Period,Prescaler,TIM_MasterOutputTrigger
+TIM1.Period=16000-1
+TIM1.Prescaler=3000-1
+TIM1.TIM_MasterOutputTrigger=TIM_TRGO_UPDATE
+>>>>>>> Stashed changes
 USART3.IPParameters=VirtualMode-Asynchronous
 USART3.VirtualMode-Asynchronous=VM_ASYNC
 VP_FATFS_VS_Generic.Mode=User_defined
