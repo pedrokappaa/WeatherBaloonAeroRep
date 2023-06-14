@@ -3,7 +3,7 @@
 
 #include "integer.h"
 #include "diskio.h"
-#include "stm32f7xx_hal.h"
+#include "stm32f7xx.h"
 
 /* Definitions for MMC/SDC command */
 #define CMD0     (0x40+0)     	/* GO_IDLE_STATE */
