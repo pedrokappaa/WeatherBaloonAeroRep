@@ -6,19 +6,16 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Middlewares/Third_Party/FatFs/src/diskio.c \
-../Middlewares/Third_Party/FatFs/src/fatfs_sd.c \
 ../Middlewares/Third_Party/FatFs/src/ff.c \
 ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.c 
 
 OBJS += \
 ./Middlewares/Third_Party/FatFs/src/diskio.o \
-./Middlewares/Third_Party/FatFs/src/fatfs_sd.o \
 ./Middlewares/Third_Party/FatFs/src/ff.o \
 ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.o 
 
 C_DEPS += \
 ./Middlewares/Third_Party/FatFs/src/diskio.d \
-./Middlewares/Third_Party/FatFs/src/fatfs_sd.d \
 ./Middlewares/Third_Party/FatFs/src/ff.d \
 ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.d 
 
@@ -30,7 +27,7 @@ Middlewares/Third_Party/FatFs/src/%.o Middlewares/Third_Party/FatFs/src/%.su: ..
 clean: clean-Middlewares-2f-Third_Party-2f-FatFs-2f-src
 
 clean-Middlewares-2f-Third_Party-2f-FatFs-2f-src:
-	-$(RM) ./Middlewares/Third_Party/FatFs/src/diskio.d ./Middlewares/Third_Party/FatFs/src/diskio.o ./Middlewares/Third_Party/FatFs/src/diskio.su ./Middlewares/Third_Party/FatFs/src/fatfs_sd.d ./Middlewares/Third_Party/FatFs/src/fatfs_sd.o ./Middlewares/Third_Party/FatFs/src/fatfs_sd.su ./Middlewares/Third_Party/FatFs/src/ff.d ./Middlewares/Third_Party/FatFs/src/ff.o ./Middlewares/Third_Party/FatFs/src/ff.su ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.d ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.o ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.su
+	-$(RM) ./Middlewares/Third_Party/FatFs/src/diskio.d ./Middlewares/Third_Party/FatFs/src/diskio.o ./Middlewares/Third_Party/FatFs/src/diskio.su ./Middlewares/Third_Party/FatFs/src/ff.d ./Middlewares/Third_Party/FatFs/src/ff.o ./Middlewares/Third_Party/FatFs/src/ff.su ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.d ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.o ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.su
 
 .PHONY: clean-Middlewares-2f-Third_Party-2f-FatFs-2f-src
 

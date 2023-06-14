@@ -7,6 +7,8 @@
 C_SRCS += \
 ../Core/Src/adc.c \
 ../Core/Src/balloon_utils.c \
+../Core/Src/dma.c \
+../Core/Src/fatfs_sd.c \
 ../Core/Src/fatfs_sd_api.c \
 ../Core/Src/gpio.c \
 ../Core/Src/main.c \
@@ -16,11 +18,14 @@ C_SRCS += \
 ../Core/Src/syscalls.c \
 ../Core/Src/sysmem.c \
 ../Core/Src/system_stm32f7xx.c \
+../Core/Src/tim.c \
 ../Core/Src/usart.c 
 
 OBJS += \
 ./Core/Src/adc.o \
 ./Core/Src/balloon_utils.o \
+./Core/Src/dma.o \
+./Core/Src/fatfs_sd.o \
 ./Core/Src/fatfs_sd_api.o \
 ./Core/Src/gpio.o \
 ./Core/Src/main.o \
@@ -30,11 +35,14 @@ OBJS += \
 ./Core/Src/syscalls.o \
 ./Core/Src/sysmem.o \
 ./Core/Src/system_stm32f7xx.o \
+./Core/Src/tim.o \
 ./Core/Src/usart.o 
 
 C_DEPS += \
 ./Core/Src/adc.d \
 ./Core/Src/balloon_utils.d \
+./Core/Src/dma.d \
+./Core/Src/fatfs_sd.d \
 ./Core/Src/fatfs_sd_api.d \
 ./Core/Src/gpio.d \
 ./Core/Src/main.d \
@@ -44,6 +52,7 @@ C_DEPS += \
 ./Core/Src/syscalls.d \
 ./Core/Src/sysmem.d \
 ./Core/Src/system_stm32f7xx.d \
+./Core/Src/tim.d \
 ./Core/Src/usart.d 
 
 
@@ -54,7 +63,7 @@ Core/Src/%.o Core/Src/%.su: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/adc.d ./Core/Src/adc.o ./Core/Src/adc.su ./Core/Src/balloon_utils.d ./Core/Src/balloon_utils.o ./Core/Src/balloon_utils.su ./Core/Src/fatfs_sd_api.d ./Core/Src/fatfs_sd_api.o ./Core/Src/fatfs_sd_api.su ./Core/Src/gpio.d ./Core/Src/gpio.o ./Core/Src/gpio.su ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/spi.d ./Core/Src/spi.o ./Core/Src/spi.su ./Core/Src/stm32f7xx_hal_msp.d ./Core/Src/stm32f7xx_hal_msp.o ./Core/Src/stm32f7xx_hal_msp.su ./Core/Src/stm32f7xx_it.d ./Core/Src/stm32f7xx_it.o ./Core/Src/stm32f7xx_it.su ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f7xx.d ./Core/Src/system_stm32f7xx.o ./Core/Src/system_stm32f7xx.su ./Core/Src/usart.d ./Core/Src/usart.o ./Core/Src/usart.su
+	-$(RM) ./Core/Src/adc.d ./Core/Src/adc.o ./Core/Src/adc.su ./Core/Src/balloon_utils.d ./Core/Src/balloon_utils.o ./Core/Src/balloon_utils.su ./Core/Src/dma.d ./Core/Src/dma.o ./Core/Src/dma.su ./Core/Src/fatfs_sd.d ./Core/Src/fatfs_sd.o ./Core/Src/fatfs_sd.su ./Core/Src/fatfs_sd_api.d ./Core/Src/fatfs_sd_api.o ./Core/Src/fatfs_sd_api.su ./Core/Src/gpio.d ./Core/Src/gpio.o ./Core/Src/gpio.su ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/spi.d ./Core/Src/spi.o ./Core/Src/spi.su ./Core/Src/stm32f7xx_hal_msp.d ./Core/Src/stm32f7xx_hal_msp.o ./Core/Src/stm32f7xx_hal_msp.su ./Core/Src/stm32f7xx_it.d ./Core/Src/stm32f7xx_it.o ./Core/Src/stm32f7xx_it.su ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f7xx.d ./Core/Src/system_stm32f7xx.o ./Core/Src/system_stm32f7xx.su ./Core/Src/tim.d ./Core/Src/tim.o ./Core/Src/tim.su ./Core/Src/usart.d ./Core/Src/usart.o ./Core/Src/usart.su
 
 .PHONY: clean-Core-2f-Src
 
