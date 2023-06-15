@@ -229,7 +229,10 @@ SPI1.IPParameters=VirtualType,Mode,Direction,CalculateBaudRate,BaudRatePrescaler
 SPI1.Mode=SPI_MODE_MASTER
 SPI1.VirtualType=VM_MASTER
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 SPI4.BaudRatePrescaler=SPI_BAUDRATEPRESCALER_4
 SPI4.CalculateBaudRate=4.0 MBits/s
 SPI4.DataSize=SPI_DATASIZE_8BIT

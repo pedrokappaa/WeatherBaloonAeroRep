@@ -65,8 +65,13 @@ main-build: Balloon.elf secondary-outputs
 
 # Tool invocations
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Balloon.elf Balloon.map: $(OBJS) $(USER_OBJS) C:\Users\pedro\STM32CubeIDE\workspace_1.11.2\Balloon\STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-gcc -o "Balloon.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\pedro\STM32CubeIDE\workspace_1.11.2\Balloon\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Balloon.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+=======
+Balloon.elf Balloon.map: $(OBJS) $(USER_OBJS) C:\Users\Joaos\OneDrive\Ambiente\ de\ Trabalho\WeatherBaloonAeroRep\STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Balloon.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\Joaos\OneDrive\Ambiente de Trabalho\WeatherBaloonAeroRep\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Balloon.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+>>>>>>> Stashed changes
 =======
 Balloon.elf Balloon.map: $(OBJS) $(USER_OBJS) C:\Users\Joaos\OneDrive\Ambiente\ de\ Trabalho\WeatherBaloonAeroRep\STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-gcc -o "Balloon.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\Joaos\OneDrive\Ambiente de Trabalho\WeatherBaloonAeroRep\STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Balloon.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group

@@ -190,6 +190,7 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+<<<<<<< Updated upstream
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1916302087;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1916302087.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1952245654;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.703401683">
@@ -200,4 +201,15 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="refreshScope"/>
+=======
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/Balloon"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/Balloon"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration"/>
+>>>>>>> Stashed changes
 </cproject>
