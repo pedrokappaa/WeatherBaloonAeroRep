@@ -4,9 +4,8 @@
  float convert_adc_to_physical_value(int adc_read, int adc_read_a, float point_a, int adc_read_b, float point_b)
 {
 	/* convert_adc_to_physical_value: Convert a digital value read from an ADC to it's correspondent physical value.
-	 * This function assumes two points in a lane. mapping (adc_read_a,point_a) and (adc_read_b,point_b).
-	 * and will determine the value (adc_read,point_c) between point_a and point_b
-	 * NOTE: point_b > point_c > point_a
+	 * This function assumes two points in a line. mapping (adc_read_a,point_a) and (adc_read_b,point_b).
+	 * and will determine the value (adc_read,point_c) on a line that passes through point_a and point_b
 	 *
 	 * parameters list:
 	 * 			(IN) adc_read: 	digital value read from ADC (12 bits value): ranges from 0 to 4096
