@@ -1,4 +1,0 @@
-fatfs_sd_api.c:15:6:SDCardInit	3
-fatfs_sd_api.c:30:6:SDCardWrite	1
-fatfs_sd_api.c:36:6:SDCardHasLowSpace	3
-fatfs_sd_api.c:50:6:SDCardEnd	3

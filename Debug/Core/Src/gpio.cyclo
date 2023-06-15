@@ -1,4 +1,0 @@
-gpio.c:44:6:MX_GPIO_Init	1
-gpio.c:103:6:HAL_GPIO_EXTI_Callback	2
-gpio.c:117:5:isButPressed	1
-gpio.c:122:6:butClear	1
