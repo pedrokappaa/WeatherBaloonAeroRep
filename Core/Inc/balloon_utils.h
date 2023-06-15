@@ -66,6 +66,8 @@ enum PowerSource {STM, LORA, STRATO_MAIN, STRATO_BCKP};
 bool set_power_source(int source);
 bool clear_power_source(int source);
 
+float convert_adc_to_physical_value(int adc_read, int adc_read_a, float point_a, int adc_read_b, float point_b);
+
 #endif /* INC_BALLOON_UTILS_H_ */
 
 
