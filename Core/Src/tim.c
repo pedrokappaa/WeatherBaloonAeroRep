@@ -116,9 +116,17 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
-	print_adc();
+	//This function will be executed when the Timer reaches 3s
+
+	if(htim == &htim1){
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+		print_adc();
+		Build_MSG(); //build Message before sending
+		Send_MSG(); //Send Message to Slave(Arduino)
+	}
+
 }
 
 
 /* USER CODE END 1 */
+
