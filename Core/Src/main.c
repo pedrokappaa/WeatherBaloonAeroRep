@@ -120,17 +120,11 @@ void SendToSlave(char* MSG, int lenMSG){
   */
 int main(void)
 {
-<<<<<<< Updated upstream
 	/* USER CODE BEGIN 1 */
-	
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // CS High => No communication between Slave (Arduino) and Master (STM)
 	/* USER CODE END 1 */
 
 	/* MCU Configuration--------------------------------------------------------*/
-=======
-  /* USER CODE BEGIN 1 */
-  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // CS High => No communication between Slave (Arduino) and Master (STM)
-  /* USER CODE END 1 */
->>>>>>> Stashed changes
 
 	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 	HAL_Init();
@@ -263,9 +257,6 @@ int main(void)
 			*/
 		}
 
-<<<<<<< Updated upstream
-	/* USER CODE END WHILE */
-=======
 		//Test values
 		float T_PT100 = 20.345689; // PT100 temperature
 		float T_STM = 19.452389; // STM temperature
@@ -279,7 +270,6 @@ int main(void)
 		SendToSlave(MSG, strlen(MSG)); //Send message MSG to Slave
 
     /* USER CODE END WHILE */
->>>>>>> Stashed changes
 
 	/* USER CODE BEGIN 3 */
 	}
