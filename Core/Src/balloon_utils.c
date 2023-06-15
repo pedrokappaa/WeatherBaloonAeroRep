@@ -23,7 +23,7 @@
 	 int delta_x=0;
 
 	 delta_y = (point_b) - (point_a);
-	 delta_x = adc_read_b - adc_read_b;
+	 delta_x = adc_read_b - adc_read_a;
 
 	 m = delta_y/delta_x;
 	 n = point_b - m*adc_read_a;
