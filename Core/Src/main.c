@@ -67,6 +67,35 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 uint16_t ADC_results[5];
+char MSG[45] = ""; //Message to send
+
+//Only to test
+float B1 = 3.444; //battery 1 level
+float B2 = 5.4555; //battery 2 level
+float B3 = 2.11111; //battery 3 level
+float T_PT100 = 24.7898; //Temperature provided by PT100
+float T_STM = -8.45234;//Temperature provided by STM
+
+
+
+void Build_MSG(){
+	//builds the Message that will be sent from the STM(Master) to the Arduino(Slave)
+	sprintf(MSG, "{T1:%.2f;T2:%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
+}
+
+void Send_MSG(){
+	//Send Message from STM(Master) to Arduino(Slave) using SPI4
+
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_RESET); // CS Low => initiate communication between Master and Slave
+	int i = 0;
+
+	for(i=0;i<strlen(MSG);i++){
+		char dataSend = MSG[i];
+		HAL_SPI_Transmit(&hspi4, (uint8_t*)&dataSend, 1,100); //send byte by byte
+	}
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // CS High => End communication
+
+}
 
 void print_adc()
 {
@@ -86,7 +115,7 @@ void print_adc()
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); //CS of SPI4 High => No communication between STM and Arduino
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -128,7 +157,9 @@ int main(void)
 	if(SDCardEnd())
 		send_UART("true");
 
-	HAL_TIM_Base_Start_IT(&htim1);
+	HAL_TIM_Base_Start_IT(&htim1); //start timer
+
+
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*) ADC_results, 5);
 	// implementar sliding window average
 
