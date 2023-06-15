@@ -62,38 +62,6 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-<<<<<<< Updated upstream
-// SD Card Init
-
-FATFS fs;						// file system data
-FIL fil;						// file pointer
-FRESULT fresult;				// to store the result
-char buffer[BUFFER_SIZE];		// to store data
-UINT br, bw;					// file r/w count
-FATFS *pfs;
-DWORD fre_clust;
-uint32_t totalSpace, freeSpace;
-
-
-//Construir a mensagem a enviar para o slave
-void ConstMsg(char* Msg, float T_PT100, float T_STM, float B1, float B2, float B3){
-
-	if(T_PT100>=0 && T_STM>=0){
-		sprintf(Msg, "{T1:+%.2f;T2:+%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
-	}
-
-	if(T_PT100>=0 && T_STM<0){
-		sprintf(Msg, "{T1:+%.2f;T2:-%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
-	}
-
-	if(T_PT100<0 && T_STM>=0){
-		sprintf(Msg, "{T1:-%.2f;T2:+%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
-	}
-
-	if(T_PT100<0 && T_STM<0){
-		sprintf(Msg, "{T1:-%.2f;T2:-%.2f;B1:%.1f;B2:%.1f;B3:%.1f}",T_PT100, T_STM, B1, B2, B3);
-	}
-=======
 uint16_t ADC_results[5];
 char MSG[42] = ""; //Message to send to arduino
 float B1 = 0; //battery 1 level
@@ -120,26 +88,15 @@ void Send_MSG(){
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // CS High => End communication
 
 }
->>>>>>> Stashed changes
 
+void print_adc()
+{
+	char message[1024];
+	sprintf((char*) message, "%d, %.2fV, %.2fV, %.2fV, %.2fV", ADC_results[0],
+			ADC_results[1]*3.33/4096, ADC_results[2]*3.33/4096,
+			ADC_results[3]*3.33/4096, ADC_results[4]*3.33/4096);
+	send_UART(message);
 }
-
-//Envio de dados para o Slave
-void SendToSlave(char* MSG, int lenMSG){
-
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_RESET); // colocar a CS em Low para iniciar a comunicacao
-	HAL_Delay(10);
-	int i = 0;
-	for(i=0;i<strlen(MSG);i++){
-		char dataSend = MSG[i];
-		HAL_SPI_Transmit(&hspi4, (uint8_t*)&dataSend, 1,100); //realizar a transmissao byte a byte
-		HAL_Delay(10); //esperar 10ms
-
-	}
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // Acabar comunicacao
-	HAL_Delay(50); //esperar 50ms
-}
-
 
 /* USER CODE END 0 */
 
@@ -149,121 +106,61 @@ void SendToSlave(char* MSG, int lenMSG){
   */
 int main(void)
 {
-<<<<<<< Updated upstream
-	/* USER CODE BEGIN 1 */
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // CS High => No communication between Slave (Arduino) and Master (STM)
-	/* USER CODE END 1 */
-
-	/* MCU Configuration--------------------------------------------------------*/
-=======
   /* USER CODE BEGIN 1 */
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); //CS of SPI4 High => No communication between STM and Arduino
   /* USER CODE END 1 */
->>>>>>> Stashed changes
 
-	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
+  /* MCU Configuration--------------------------------------------------------*/
 
-	/* USER CODE BEGIN Init */
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
 
-	/* USER CODE END Init */
+  /* USER CODE BEGIN Init */
 
-	/* Configure the system clock */
-	SystemClock_Config();
+  /* USER CODE END Init */
 
-	/* USER CODE BEGIN SysInit */
+  /* Configure the system clock */
+  SystemClock_Config();
 
-	/* USER CODE END SysInit */
+  /* USER CODE BEGIN SysInit */
 
-	/* Initialize all configured peripherals */
-	MX_GPIO_Init();
-	MX_ADC3_Init();
-	MX_SPI1_Init();
-	MX_FATFS_Init();
-	MX_USART3_UART_Init();
-	/* USER CODE BEGIN 2 */
+  /* USER CODE END SysInit */
 
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_FATFS_Init();
+  MX_USART3_UART_Init();
+  MX_ADC1_Init();
+  MX_TIM1_Init();
+  MX_SPI1_Init();
+  MX_SPI4_Init();
+  /* USER CODE BEGIN 2 */
+
+  	/*
 	reset_UART();
 	send_UART(PROMPT);
 
-	// Wait for SD module reset
-	HAL_Delay(500);
+	if(SDCardInit())
+		send_UART("true");
 
-  	// Mount SD Card
-  	if(f_mount(&fs, "", 0) != FR_OK)
-  		send_UART("Not mounted");
+	SDCardWrite("Hello\n");
 
-  	HAL_Delay(500);
+	if(SDCardEnd())
+		send_UART("true");
 
-<<<<<<< Updated upstream
-  	// Open file to write
-  	if(f_open(&fil, "first.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE) != FR_OK)
-  		send_UART("Not opened");
-=======
 	HAL_TIM_Base_Start_IT(&htim1); //start timer
 
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*) ADC_results, 5);
 	// implementar sliding window average
->>>>>>> Stashed changes
 
-  	HAL_Delay(500);
+	*/
 
-  	// Check freeSpace space
-  	if(f_getfree("", &fre_clust, &pfs) != FR_OK)
-  		send_UART("Not free");
 
-  	HAL_Delay(500);
+  /* USER CODE END 2 */
 
-  	totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
-  	freeSpace = (uint32_t)(fre_clust * pfs->csize * 0.5);
-
-  	HAL_Delay(500);
-
-  	// free space is less than 1kb
-  	if(freeSpace < 1)
-  		send_UART("Low storage");
-
-  	HAL_Delay(500);
-
-  	// Writing text
-  	f_puts("STM32 SD Card I/O Example via SPI\n", &fil);
-  	f_puts("Save the world!!!", &fil);
-
-  	HAL_Delay(500);
-
-  	// Close file
-  	if(f_close(&fil) != FR_OK)
-  		send_UART("Not closed");
-
-  	HAL_Delay(500);
-
-  	// Open file to read
-  	if(f_open(&fil, "first.txt", FA_READ) != FR_OK)
-  		send_UART("Not opened");
-
-  	HAL_Delay(500);
-
-  	while(f_gets(buffer, sizeof(buffer), &fil))
-  	{
-  		send_UART(buffer);
-  	}
-
-  	HAL_Delay(500);
-
-  	// Close file
-  	if(f_close(&fil) != FR_OK)
-  		send_UART("Not closed");
-
-  	HAL_Delay(500);
-
-  	// Unmount SDCARD
-  	if(f_mount(NULL, "", 1) != FR_OK)
-  		send_UART("Not unmounted");
-
-	/* USER CODE END 2 */
-
-	/* Infinite loop */
-	/* USER CODE BEGIN WHILE */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
 
 	while (1)
 	{
@@ -299,26 +196,12 @@ int main(void)
 			*/
 		}
 
-<<<<<<< Updated upstream
-		//Test values
-		float T_PT100 = 20.345689; // PT100 temperature
-		float T_STM = 19.452389; // STM temperature
-		float B1 = 4.56756; //battery 1 level
-		float B2 = 3.23453; //battery 2 level
-		float B3 = 5.001; //battery 3 level
-
-
-		char MSG[42] = ""; //Message to send
-		ConstMsg(MSG, T_PT100, T_STM, B1, B2, B3); // build Message
-		SendToSlave(MSG, strlen(MSG)); //Send message MSG to Slave
-=======
->>>>>>> Stashed changes
 
     /* USER CODE END WHILE */
 
-	/* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
 	}
-	/* USER CODE END 3 */
+  /* USER CODE END 3 */
 }
 
 /**
