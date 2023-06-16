@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "stdbool.h"
 /* USER CODE END Includes */
 
 extern TIM_HandleTypeDef htim1;
@@ -41,7 +41,8 @@ void print_adc();
 void MX_TIM1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+bool ReturnFlagTimer();
+void ClearFlagTimer();
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

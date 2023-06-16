@@ -1,3 +1,2 @@
-../Core/Src/balloon_utils.c:4:8:convert_adc_to_physical_value	56	static
-../Core/Src/balloon_utils.c:35:6:set_power_source	16	static
-../Core/Src/balloon_utils.c:61:6:clear_power_source	16	static
+../Core/Src/balloon_utils.c:3:6:set_power_source	16	static
+../Core/Src/balloon_utils.c:29:6:clear_power_source	16	static
