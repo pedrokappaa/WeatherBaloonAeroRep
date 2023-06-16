@@ -59,6 +59,8 @@ O - ADC1_CH13	()
 
 #ifndef INC_BALLOON_UTILS_H_
 #define INC_BALLOON_UTILS_H_
+#define MINIMUM_VOLTAGE_DATALOGGER 7.5
+#define MINIMUM_VOLTAGE_SYSTEM 7.5
 #include <stdbool.h>
 
 enum PowerSource {STM, LORA, STRATO_MAIN, STRATO_BCKP};

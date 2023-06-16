@@ -82,6 +82,7 @@ float T_PT100; //Temperature provided by PT100
 float dT;//Temperature gradient provided by STM
 int time; // to save the time -
 
+bool flagSDEnd = false; //diz se o SD card End ja foi realizado
 
 void Build_MSG(){
 	//builds the Message that will be sent from the STM(Master) to the Arduino(Slave)
@@ -149,8 +150,25 @@ void print_adc()
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET); // Acionado para alimentarmos a STM
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);//O Led vermelho (led dos erros) desligado
+
+  while(!isButPressed()); //wait to press STM bottom to feed LoRa and Datalogger
+  butClear();
+
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_SET);//Feed Lora
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_4, GPIO_PIN_SET); //Feed Datalogger
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET); //Alimentacao de BackUp off
+
+
+  if(!SDCardInit()){
+	  //Error - Turn on Error Led
+	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
+  }
+
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); //CS of SPI4 High => No communication between STM and Arduino
   time = 0; //start time counting
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -192,14 +210,13 @@ int main(void)
 	if(SDCardEnd())
 		send_UART("true");
 
-	HAL_TIM_Base_Start_IT(&htim1); //start timer
-
 
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*) ADC_results, 5);
 	// implementar sliding window average
 
 	*/
 
+  HAL_TIM_Base_Start_IT(&htim1); //start timer
 
   /* USER CODE END 2 */
 
@@ -215,9 +232,50 @@ int main(void)
 			convert_adc_to_physicalvalue(); // Convert adc values to Temperature and Voltages
 			//print_adc();
 			Build_MSG(); //build Message before sending
+
+			if(!flagSDEnd){
+				//Ainda nao foi realizado o End do cartao
+				if(SDCardHasLowSpace()){
+					//Low space at the SD card => End SD card
+					if(!SDCardEnd()){
+						//Nao conseguiu realizar o End com sucesso
+						HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET); //Acidionar led de erro
+					}
+					else{
+						//Realizou-se o End do cartao
+						flagSDEnd = true;
+					}
+				}
+				else{
+					//O cartao tem espaco ainda
+					if(!SDCardWrite(MSG)){
+						//Nao conseguiu escrever
+						HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET); //Acidionar led de erro
+					}
+				}
+			}
+
+
 			Send_MSG(); //Send Message to Slave(Arduino)
+
 			ClearFlagTimer(); //set flag = false
 		}
+
+
+		//Ver se e necessario trocar a fonte de alimentacao do datalogger
+		if(B3<=MINIMUM_VOLTAGE_DATALOGGER){
+			//A alimentacao do datalogger deve ser trocada para a backup
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET); // Ativar a Alimentacao de backup
+			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_4, GPIO_PIN_RESET); //Desligar a alimentacao inicial do datalogger
+		}
+
+
+		//Ver se e necessario desligar a LoRa
+		if(B1 <= MINIMUM_VOLTAGE_SYSTEM){
+			//A fonte de alimentacao de backup e menor ou igual a 7.5, por isso vamos desligar o Lora para poupar energia
+			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_RESET); //Desligar a alimentacao ao Lora
+		}
+
 
 /*
 		if(has_message_from_UART())
