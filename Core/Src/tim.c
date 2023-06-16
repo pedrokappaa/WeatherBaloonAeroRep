@@ -24,6 +24,7 @@
 #include "adc.h"
 #include "usart.h"
 #include <stdio.h>
+#include <stdbool.h>
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim1;
@@ -112,17 +113,24 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 
 /* USER CODE BEGIN 1 */
 
+volatile bool flag2s = false;
 
+bool ReturnFlagTimer(){
+
+	return flag2s;
+}
+
+void ClearFlagTimer(){
+	flag2s = false;
+}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	//This function will be executed when the Timer reaches 3s
+	//This function will be executed when the Timer reaches 2s
 
 	if(htim == &htim1){
 		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
-		print_adc();
-		Build_MSG(); //build Message before sending
-		Send_MSG(); //Send Message to Slave(Arduino)
+		flag2s = true;
 	}
 }
 
