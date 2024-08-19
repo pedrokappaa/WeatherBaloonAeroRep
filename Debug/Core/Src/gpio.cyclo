@@ -1,0 +1,4 @@
+../Core/Src/gpio.c:44:6:MX_GPIO_Init	1
+../Core/Src/gpio.c:128:6:HAL_GPIO_EXTI_Callback	2
+../Core/Src/gpio.c:142:5:isButPressed	1
+../Core/Src/gpio.c:147:6:butClear	1

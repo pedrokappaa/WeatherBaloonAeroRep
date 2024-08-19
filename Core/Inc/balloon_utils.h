@@ -13,22 +13,22 @@
 5  [ ] [ ]  6			5  [ ] [ ]  6
 7  [E] [ ]  8			7  [ ] [ ]  8
 9  [ ] [ ] 10			9  [ ] [A] 10
-11 [F] [ ] 12			11 [ ] [B] 12
+11 [F] [ ] 12			11 [ ] [N] 12
 13 [K] [ ] 14			13 [ ] [C] 14
 15 [ ] [ ] 16			15 [ ] [D] 16
 						17 [ ] [ ] 18
 						19 [ ] [ ] 20
 
 1  [M] [ ]  2			1  [ ] [ ]  2
-3  [N] [ ]  4			3  [ ] [ ]  4
-5  [O] [ ]  6			5  [ ] [ ]  6
-7  [ ] [ ]  8			7  [ ] [ ]  8
+3  [ ] [ ]  4			3  [ ] [ ]  4
+5  [ ] [ ]  6			5  [ ] [ ]  6
+7  [ ] [ ]  8			7  [G] [ ]  8
 9  [ ] [ ] 10			9  [ ] [ ] 10
-11 [ ] [ ] 12			11 [ ] [ ] 12
-13 [ ] [G] 14			13 [ ] [ ] 14
-15 [ ] [H] 16			15 [ ] [ ] 16
-17 [ ] [I] 18			17 [ ] [ ] 18
-19 [ ] [J] 20			19 [ ] [ ] 20
+11 [ ] [ ] 12			11 [H] [ ] 12
+13 [ ] [ ] 14			13 [I] [ ] 14
+15 [ ] [ ] 16			15 [ ] [B] 16
+17 [ ] [ ] 18			17 [ ] [ ] 18
+19 [ ] [ ] 20			19 [ ] [ ] 20
 21 [ ] [ ] 22			21 [ ] [ ] 22
 23 [ ] [ ] 24			23 [ ] [ ] 24
 25 [ ] [ ] 26			25 [ ] [ ] 26
@@ -38,29 +38,28 @@
 						33 [ ] [ ] 34
      	 	 	 	 	 	 CN10
 
-A - SPI1_SCLK	(SDCARD)
-B - SPI1_MISO	(SDCARD)
-C - SPI1_MOSI	(SDCARD)
-D - SPI1_CS		(SDCARD)
+A - SPI1_SCLK	(SDCARD)		PA5
+B - SPI1_MISO	(SDCARD)		PG9
+C - SPI1_MOSI	(SDCARD)		PA7
+D - SPI1_CS		(SDCARD)		PD14
 E - 3V3			(SDCARD)
 F - GND			(SDCARD)
-G - SPI4_SCK	(LORA)
-H - SPI4_CS		(LORA)
-I - SPI4_MISO	(LORA)
-J - SPI4_MOSI	(LORA)
-K - GND			(LORA)
-L - ADC1_CH0	()
-M - ADC1_CH3	()
-N - ADC1_CH10	()
-O - ADC1_CH13	()
+G - GPIO_STM	(STM)			PB1
+H - GPIO_DL		(DATALOGGER)	PF4
+I - GPIO_DL2	(DATALOGGER)	PB6
+K - GND			(DATALOGGER)
+L - ADC1_CH0	(V_LC)			PA0
+M - ADC1_CH3	(V_AA)			PA3
+N - ADC1_CH6	(V_9V)			PA6
+
 
 
 ************************************/
 
 #ifndef INC_BALLOON_UTILS_H_
 #define INC_BALLOON_UTILS_H_
-#define MINIMUM_VOLTAGE_DATALOGGER 7.5
-#define MINIMUM_VOLTAGE_SYSTEM 7.5
+#define MINIMUM_VOLTAGE_DATALOGGER 7.5 //TESTAR VALORES
+//#define MINIMUM_VOLTAGE_SYSTEM 7.5
 #include <stdbool.h>
 
 enum PowerSource {STM, LORA, STRATO_MAIN, STRATO_BCKP};

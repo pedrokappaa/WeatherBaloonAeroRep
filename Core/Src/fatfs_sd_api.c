@@ -11,7 +11,6 @@ FATFS *pfs;
 DWORD fre_clust;
 uint32_t totalSpace, freeSpace;
 
-
 bool SDCardInit()
 {
 	// Mount SD Card
@@ -30,6 +29,8 @@ bool SDCardInit()
 bool SDCardWrite(const char* msg)
 {
 	f_puts(msg, &fil);
+	f_sync(&fil);
+
 	return true;
 }
 
