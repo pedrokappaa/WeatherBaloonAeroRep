@@ -29,7 +29,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#include "usbd_cdc_if.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -66,68 +65,51 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t convCompleted = 0;
-uint16_t ADC_results[3]; //it will have ADC results
-//ADC_results[0] = Temp STM
-//ADC_results[1] = Temp PT100
-//ADC_results[2] = V_LC ------ Para descobrir esta tensao tenho de multiplicar o valor do ADC por 3
-//ADC_results[3] = V_AA ------ Para descobrir esta tensao tenho de multiplicar o valor do ADC por 2
-//ADC_results[4] = V_9V ------ Para descobrir esta tensao tenho de multiplicar o valor do ADC por 3
-char MSG[512]; //Message to send
+uint8_t convCompleted = 0;	//Flag to check the state of the ADC conversions
+uint16_t ADC_results[3]; 	//List with ADC results
+char MSG[512]; 				//Message to send
 
-float V_LC; //battery 1 level
-float V_AA; //battery 2 level
-float V_9V; //battery 3 level
-float T_PT100; //Temperature provided by PT100
-float dT;//Temperature gradient provided by STM
-int time; // to save the time -
+float V_LC; 	//battery 1 level
+float V_AA; 	//battery 2 level
+float V_9V; 	//battery 3 level
+float T_PT100;  //Temperature provided by PT100
+float dT;		//Temperature gradient provided by STM
+int time; 		//To save the time
 
-bool flagSDEnd = false; //diz se o SD card End ja foi realizado
+bool flagSDEnd = false; 	//Flag to check if the SDCard was closed
+bool switchFont = false;	//Flag to check if the energy supplier was already switched
 
-void Build_MSG(){
-	//builds the Message that will be sent from the STM(Master) to the Arduino(Slave)
-	sprintf(MSG, "%d;%.1f;%.1f;%.1f",time, V_LC, V_AA, V_9V);
+void Build_MSG(){	//builds the Message that will be sent from the STM(Master) to the Arduino(Slave)
+	sprintf(MSG, "%d;%.1f;%.1f;%.1f\n",time, V_LC, V_AA, V_9V);
 }
 
-
 void convert_adc_to_physicalvalue(){
-	//float aux0, aux1, aux2, aux3, aux4;
-	float aux2, aux3, aux4;
+	float aux1, aux2, aux3;
 
 	//Pass ADC result from bits to tension
-	//aux0 = ADC_results[0]*3.3/4096; //ADC result in Volts
-	//aux1 = ADC_results[1]*3.3/4096;
-	aux2 = ADC_results[0]*3.3/4096;
-	aux3 = ADC_results[1]*3.3/4096;
-	aux4 = ADC_results[2]*3.3/4096;
+	aux1 = ADC_results[0]*3.3/4096;	//ADC result in Volts
+	aux2 = ADC_results[1]*3.3/4096;
+	aux3 = ADC_results[2]*3.3/4096;
 
-	//Temperature line: Temperature = 34,469 * ADC_result - 67,653
 	//Correction factor for V_LC: 3
 	//Correction factor for V_AA: 2
 	//Correction factor for V_9V: 3
-
 	//Convert ADC result to temperature and voltages
-	//dT = 34.469*aux0 - 67.653; //STM temperature variation
-	//T_PT100 = 34.469*aux1 - 67.653; //PT100 temperature
-	V_LC = aux2 * 3;
-	V_AA = aux3 * 2;
-	V_9V = aux4 * 3;
-
+	V_LC = aux1 * 3;
+	V_AA = aux2 * 2;
+	V_9V = aux3 * 3.3;
 }
 
-
-void Send_MSG(){
-	//Send Message from STM(Master) to Arduino(Slave) using SPI4
-
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_RESET); // CS Low => initiate communication between Master and Slave
+void Send_MSG()		//Send Message from STM(Master) to Arduino(Slave) using SPI4
+{
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_RESET); 		// CS Low => initiate communication between Master and Slave
 	int i = 0;
 
 	for(i=0;i<strlen(MSG);i++){
 		char dataSend = MSG[i];
-		HAL_SPI_Transmit(&hspi4, (uint8_t*)&dataSend, 1,100); //send byte by byte
+		HAL_SPI_Transmit(&hspi4, (uint8_t*)&dataSend, 1,100); 	//Send byte by byte
 	}
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); // CS High => End communication
-
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); 		// CS High => End communication
 }
 
 void print_adc()
@@ -146,11 +128,9 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
-
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
@@ -176,15 +156,14 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET); // Acionado para alimentarmos a STM
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET); 	//Feed STM
 
   while(!isButPressed()); //wait to press STM bottom to feed LoRa and Datalogger
   butClear();
 
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);//O Led vermelho (led dos erros) desligado
-//  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_SET);//Feed Lora
-  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_4, GPIO_PIN_SET); //Feed Datalogger
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET); //Alimentacao de BackUp off
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);	//O Led vermelho (led dos erros) desligado
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_4, GPIO_PIN_SET); 		//Feed Datalogger
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET); 	//Alimentacao de BackUp off
 
 
   if(!SDCardInit()){
@@ -192,27 +171,19 @@ int main(void)
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
   }
 
-  //SDCardWrite("time;V_LC;V_AA;V_9V\n");
+  HAL_Delay(3000);
 
-//  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET); //CS of SPI4 High => No communication between STM and Arduino
+  SDCardWrite("time;V_LC;V_AA;V_9V\n");
+
   time = 0; //start time counting
 
+  reset_UART();
+  send_UART(PROMPT);
+  reset_UART();
+  send_UART("time;V_LC;V_AA;V_9V");
 
-	reset_UART();
-	send_UART(PROMPT);
-	reset_UART();
-	send_UART("time;V_LC;V_AA;V_9V");
+  HAL_Delay(1000);
 
-	HAL_Delay(1000);
-/*
-	if(SDCardInit())
-		send_UART("true");
-
-	SDCardWrite("Hello\n");
-
-	if(SDCardEnd())
-		send_UART("true");
-*/
   HAL_TIM_Base_Start_IT(&htim1); //start timer
 
   /* USER CODE END 2 */
@@ -222,7 +193,6 @@ int main(void)
 
 	while (1)
 	{
-
 		if(ReturnFlagTimer()){
 			//2s Passed
 			time += 2; //add 2s to time since 2s passed from the last measure
@@ -258,9 +228,6 @@ int main(void)
 				}
 			}
 
-
-//			Send_MSG(); //Send Message to Slave(Arduino)
-
 			ClearFlagTimer(); //set flag = false
 		}
 
@@ -268,38 +235,13 @@ int main(void)
 		//Ver se e necessario trocar a fonte de alimentacao do datalogger
 		if(V_9V <= MINIMUM_VOLTAGE_DATALOGGER){
 			//A alimentacao do datalogger deve ser trocada para a backup
-			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET); // Ativar a Alimentacao de backup
-			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_4, GPIO_PIN_RESET); //Desligar a alimentacao inicial do datalogger
+			if (!switchFont){
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET); // Ativar a Alimentacao de backup
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_4, GPIO_PIN_RESET); //Desligar a alimentacao inicial do datalogger
+				SDCardWrite("Switched to Backup Battery\n");
+				switchFont = true;
+			}
 		}
-
-/*
-		//Ver se e necessario desligar a LoRa
-		if(V_LC <= MINIMUM_VOLTAGE_SYSTEM){
-			//A fonte de alimentacao de backup e menor ou igual a 7.5, por isso vamos desligar o Lora para poupar energia
-			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_RESET); //Desligar a alimentacao ao Lora
-		}
-*/
-
-/*
-		if(has_message_from_UART())
-		{
-		  uint8_t message[BUFFER_SIZE];
-
-		  read_UART((char*) message);
-
-		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
-
-		  send_UART((char*) message);
-
-		  while(is_transmitting_to_UART());
-
-		  reset_UART();
-		  send_UART(PROMPT);
-		}
-*/
-
-
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
